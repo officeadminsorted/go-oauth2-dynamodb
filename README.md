@@ -7,7 +7,7 @@
 ## Install
 
 ``` bash
-$ go get -u github.com/contamobi/go-oauth2-dynamodb
+$ go get -u github.com/aubelsb2/go-oauth2-dynamodb
 ```
 
 ## Usage (specifying credentials)
@@ -16,8 +16,8 @@ $ go get -u github.com/contamobi/go-oauth2-dynamodb
 package main
 
 import (
-	"github.com/contamobi/go-oauth2-dynamodb"
-	"github.com/contamobi/go-oauth2/manage"
+	"github.com/aubelsb2/go-oauth2-dynamodb"
+	"gopkg.in/oauth2.v4/manage"
 )
 
 func main() {
@@ -43,8 +43,8 @@ func main() {
 package main
 
 import (
-	"github.com/contamobi/go-oauth2-dynamodb"
-	"github.com/contamobi/go-oauth2/manage"
+	"github.com/aubelsb2/go-oauth2-dynamodb"
+	"gopkg.in/oauth2.v4/manage"
 )
 
 func main() {
@@ -71,8 +71,8 @@ func main() {
 package main
 
 import (
-	"github.com/contamobi/go-oauth2-dynamodb"
-	"github.com/contamobi/go-oauth2/manage"
+	"github.com/aubelsb2/go-oauth2-dynamodb"
+	"gopkg.in/oauth2.v4/manage"
 )
 
 func main() {

@@ -2,10 +2,6 @@ cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/aws/aws-sdk-go v1.32.7 h1:H4VgdCSF1cHw0VD8zGc98T1bGdACoLkh/vK2L6wgOUU=
 github.com/aws/aws-sdk-go v1.32.7/go.mod h1:5zCpMtNQVjRREroY7sYe8lOMRSxkhG6MZveU8YkpAk0=
-github.com/contamobi/go-oauth2-dynamodb v0.0.0-20180326134040-b3af9cfd8480 h1:/kyWd9NSAepK8PwsO296ZYcohbgMljjtS7Y7wRm+vT4=
-github.com/contamobi/go-oauth2-dynamodb v0.0.0-20180326134040-b3af9cfd8480/go.mod h1:6hNtCrqZhP0b6Pmeph0mWkeVyvOIQvpqnqXraEjyouY=
-github.com/contamobi/oauth2 v3.8.6+incompatible h1:woX3839cVF1YIpD6INjhoY0teaXgBO/kmX5UyZ9OjxU=
-github.com/contamobi/oauth2 v3.8.6+incompatible/go.mod h1:j2b3ZSgZEqL12ABWkB3/G7FeepLaS1OBYRRk2/ByqOo=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
