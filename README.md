@@ -23,7 +23,7 @@ import (
 func main() {
 	manager := manage.NewDefaultManager()
 	manager.MustTokenStorage(
-		dynamo.NewTokenStore(dynamo.NewConfig(
+		dynamo.NewTokenStore(dynamo.NewTokenStoreConfig(
 			"us-east-1", // AWS Region
 			"http://localhost:8000", // AWS DynamoDB Endpoint
 			"AKIA*********", // AWS Access Key
@@ -50,7 +50,7 @@ import (
 func main() {
 	manager := manage.NewDefaultManager()
 	manager.MustTokenStorage(
-		dynamo.NewTokenStore(dynamo.NewConfig(
+		dynamo.NewTokenStore(dynamo.NewTokenStoreConfig(
 			"us-east-1", // AWS Region
 			"", // Emtpy
 			"", // Emtpy
@@ -58,6 +58,32 @@ func main() {
 			"oauth2_basic", // Oauth2 basic table name
                         "oauth2_access", // Oauth2 access table name
                         "oauth2_refresh", // Oauth2 refresh table name
+
+		)),
+	)
+	// ...
+}
+```
+
+## Client ID version
+
+``` go
+package main
+
+import (
+	"github.com/contamobi/go-oauth2-dynamodb"
+	"github.com/contamobi/go-oauth2/manage"
+)
+
+func main() {
+	manager := manage.NewDefaultManager()
+	manager.MapClientStorage(
+		dynamo.NewClientStore(dynamo.NewClientStoreConfig(
+			"us-east-1", // AWS Region
+			"", // Emtpy
+			"", // Emtpy
+			"", // Emtpy
+			"client_id", // Client id table name
 
 		)),
 	)
