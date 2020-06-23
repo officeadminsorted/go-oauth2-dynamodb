@@ -1,16 +1,17 @@
 package dynamo
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"gopkg.in/oauth2.v4"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/contamobi/oauth2"
-	"github.com/contamobi/oauth2/models"
 	"gopkg.in/mgo.v2/bson"
+	"gopkg.in/oauth2.v4/models"
 )
 
 func NewTokenStore(config *Config) (store oauth2.TokenStore) {
@@ -40,23 +41,23 @@ type basicData struct {
 }
 
 // Create and store the new token information
-func (tokenStorage *TokenStore) Create(info oauth2.TokenInfo) (err error) {
+func (tokenStorage *TokenStore) Create(ctx context.Context, info oauth2.TokenInfo) (err error) {
 	if code := info.GetCode(); code != "" {
-		err = CreateWithAuthorizationCode(tokenStorage, info, "")
+		err = CreateWithAuthorizationCode(ctx, tokenStorage, info, "")
 		if err != nil {
 			fmt.Printf("CreateWithAuthorizationCode error: %s\n", err)
 		}
 		return
 	}
 	if refresh := info.GetRefresh(); refresh != "" {
-		err = CreateWithRefreshToken(tokenStorage, info)
+		err = CreateWithRefreshToken(ctx, tokenStorage, info)
 	} else {
-		err = CreateWithAccessToken(tokenStorage, info, "")
+		err = CreateWithAccessToken(ctx, tokenStorage, info, "")
 	}
 	return
 }
 
-func CreateWithAuthorizationCode(tokenStorage *TokenStore, info oauth2.TokenInfo, id string) (err error) {
+func CreateWithAuthorizationCode(ctx context.Context, tokenStorage *TokenStore, info oauth2.TokenInfo, id string) (err error) {
 	code := info.GetCode()
 	if len(id) > 0 {
 		code = id
@@ -89,15 +90,15 @@ func CreateWithAuthorizationCode(tokenStorage *TokenStore, info oauth2.TokenInfo
 			},
 		},
 	}
-	_, err = tokenStorage.session.PutItem(params)
+	_, err = tokenStorage.session.PutItemWithContext(ctx, params)
 	return
 }
 
-func CreateWithAccessToken(tokenStorage *TokenStore, info oauth2.TokenInfo, id string) (err error) {
+func CreateWithAccessToken(ctx context.Context, tokenStorage *TokenStore, info oauth2.TokenInfo, id string) (err error) {
 	if len(id) == 0 {
 		id = bson.NewObjectId().Hex()
 	}
-	err = CreateWithAuthorizationCode(tokenStorage, info, id)
+	err = CreateWithAuthorizationCode(ctx, tokenStorage, info, id)
 	if err != nil {
 		return
 	}
@@ -116,13 +117,13 @@ func CreateWithAccessToken(tokenStorage *TokenStore, info oauth2.TokenInfo, id s
 			},
 		},
 	}
-	_, err = tokenStorage.session.PutItem(accessParams)
+	_, err = tokenStorage.session.PutItemWithContext(ctx, accessParams)
 	return
 }
 
-func CreateWithRefreshToken(tokenStorage *TokenStore, info oauth2.TokenInfo) (err error) {
+func CreateWithRefreshToken(ctx context.Context, tokenStorage *TokenStore, info oauth2.TokenInfo) (err error) {
 	id := bson.NewObjectId().Hex()
-	err = CreateWithAccessToken(tokenStorage, info, id)
+	err = CreateWithAccessToken(ctx, tokenStorage, info, id)
 	if err != nil {
 		return
 	}
@@ -141,12 +142,12 @@ func CreateWithRefreshToken(tokenStorage *TokenStore, info oauth2.TokenInfo) (er
 			},
 		},
 	}
-	_, err = tokenStorage.session.PutItem(refreshParams)
+	_, err = tokenStorage.session.PutItemWithContext(ctx, refreshParams)
 	return
 }
 
 // RemoveByCode use the authorization code to delete the token information
-func (tokenStorage *TokenStore) RemoveByCode(code string) (err error) {
+func (tokenStorage *TokenStore) RemoveByCode(ctx context.Context, code string) (err error) {
 	input := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"ID": {
@@ -155,7 +156,7 @@ func (tokenStorage *TokenStore) RemoveByCode(code string) (err error) {
 		},
 		TableName: aws.String(tokenStorage.config.TABLE.BasicCname),
 	}
-	_, err = tokenStorage.session.DeleteItem(input)
+	_, err = tokenStorage.session.DeleteItemWithContext(ctx, input)
 	if err != nil {
 		fmt.Printf("RemoveByCode error: %s\n", err.Error())
 	}
@@ -163,7 +164,7 @@ func (tokenStorage *TokenStore) RemoveByCode(code string) (err error) {
 }
 
 // RemoveByAccess use the access token to delete the token information
-func (tokenStorage *TokenStore) RemoveByAccess(access string) (err error) {
+func (tokenStorage *TokenStore) RemoveByAccess(ctx context.Context, access string) (err error) {
 	input := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"ID": {
@@ -172,7 +173,7 @@ func (tokenStorage *TokenStore) RemoveByAccess(access string) (err error) {
 		},
 		TableName: aws.String(tokenStorage.config.TABLE.AccessCName),
 	}
-	_, err = tokenStorage.session.DeleteItem(input)
+	_, err = tokenStorage.session.DeleteItemWithContext(ctx, input)
 	if err != nil {
 		fmt.Printf("RemoveByAccess error: %s\n", err.Error())
 	}
@@ -180,7 +181,7 @@ func (tokenStorage *TokenStore) RemoveByAccess(access string) (err error) {
 }
 
 // RemoveByRefresh use the refresh token to delete the token information
-func (tokenStorage *TokenStore) RemoveByRefresh(refresh string) (err error) {
+func (tokenStorage *TokenStore) RemoveByRefresh(ctx context.Context, refresh string) (err error) {
 	input := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"ID": {
@@ -189,14 +190,14 @@ func (tokenStorage *TokenStore) RemoveByRefresh(refresh string) (err error) {
 		},
 		TableName: aws.String(tokenStorage.config.TABLE.RefreshCName),
 	}
-	_, err = tokenStorage.session.DeleteItem(input)
+	_, err = tokenStorage.session.DeleteItemWithContext(ctx, input)
 	if err != nil {
 		fmt.Printf("RemoveByRefresh error: %s\n", err.Error())
 	}
 	return
 }
 
-func (tokenStorage *TokenStore) getData(basicID string) (to oauth2.TokenInfo, err error) {
+func (tokenStorage *TokenStore) getData(ctx context.Context, basicID string) (to oauth2.TokenInfo, err error) {
 	if len(basicID) == 0 {
 		return
 	}
@@ -208,7 +209,7 @@ func (tokenStorage *TokenStore) getData(basicID string) (to oauth2.TokenInfo, er
 			},
 		},
 	}
-	result, err := tokenStorage.session.GetItem(input)
+	result, err := tokenStorage.session.GetItemWithContext(ctx, input)
 	if err != nil {
 		return
 	}
@@ -229,7 +230,7 @@ func (tokenStorage *TokenStore) getData(basicID string) (to oauth2.TokenInfo, er
 	return
 }
 
-func (tokenStorage *TokenStore) getBasicID(cname, token string) (basicID string, err error) {
+func (tokenStorage *TokenStore) getBasicID(ctx context.Context, cname, token string) (basicID string, err error) {
 	input := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"ID": {
@@ -238,7 +239,7 @@ func (tokenStorage *TokenStore) getBasicID(cname, token string) (basicID string,
 		},
 		TableName: aws.String(cname),
 	}
-	result, err := tokenStorage.session.GetItem(input)
+	result, err := tokenStorage.session.GetItemWithContext(ctx, input)
 	if err != nil {
 		return
 	}
@@ -252,27 +253,27 @@ func (tokenStorage *TokenStore) getBasicID(cname, token string) (basicID string,
 }
 
 // GetByCode use the authorization code for token information data
-func (tokenStorage *TokenStore) GetByCode(code string) (to oauth2.TokenInfo, err error) {
-	to, err = tokenStorage.getData(code)
+func (tokenStorage *TokenStore) GetByCode(ctx context.Context, code string) (to oauth2.TokenInfo, err error) {
+	to, err = tokenStorage.getData(ctx, code)
 	return
 }
 
 // GetByAccess use the access token for token information data
-func (tokenStorage *TokenStore) GetByAccess(access string) (to oauth2.TokenInfo, err error) {
-	basicID, err := tokenStorage.getBasicID(tokenStorage.config.TABLE.AccessCName, access)
+func (tokenStorage *TokenStore) GetByAccess(ctx context.Context, access string) (to oauth2.TokenInfo, err error) {
+	basicID, err := tokenStorage.getBasicID(ctx, tokenStorage.config.TABLE.AccessCName, access)
 	if err != nil && basicID == "" {
 		return
 	}
-	to, err = tokenStorage.getData(basicID)
+	to, err = tokenStorage.getData(ctx, basicID)
 	return
 }
 
 // GetByRefresh use the refresh token for token information data
-func (tokenStorage *TokenStore) GetByRefresh(refresh string) (to oauth2.TokenInfo, err error) {
-	basicID, err := tokenStorage.getBasicID(tokenStorage.config.TABLE.RefreshCName, refresh)
+func (tokenStorage *TokenStore) GetByRefresh(ctx context.Context, refresh string) (to oauth2.TokenInfo, err error) {
+	basicID, err := tokenStorage.getBasicID(ctx, tokenStorage.config.TABLE.RefreshCName, refresh)
 	if err != nil && basicID == "" {
 		return
 	}
-	to, err = tokenStorage.getData(basicID)
+	to, err = tokenStorage.getData(ctx, basicID)
 	return
 }
