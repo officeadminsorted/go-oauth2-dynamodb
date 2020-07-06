@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/oauth2.v4"
+	"github.com/go-oauth2/oauth2/v4"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/go-oauth2/oauth2/v4/models"
 	"gopkg.in/mgo.v2/bson"
-	"gopkg.in/oauth2.v4/models"
 )
 
 func NewTokenStore(config *Config) (store oauth2.TokenStore) {

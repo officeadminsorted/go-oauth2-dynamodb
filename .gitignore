@@ -15,3 +15,5 @@
 
 #cloudformation
 cloudformation/dynamodb-release.yml
+
+/.idea
