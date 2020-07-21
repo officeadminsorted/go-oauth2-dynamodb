@@ -2,7 +2,7 @@ package dynamo
 
 import (
 	"context"
-	"github.com/go-oauth2/oauth2/v4"
+	"github.com/officeadminsorted/oauth2/v4"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
