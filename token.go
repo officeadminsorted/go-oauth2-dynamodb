@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/officeadminsorted/oauth2/v4"
+	"github.com/officeadminsorted/oauth2/v5"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/officeadminsorted/oauth2/v4/models"
+	"github.com/officeadminsorted/oauth2/v5/models"
 	"gopkg.in/mgo.v2/bson"
 )
 

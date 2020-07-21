@@ -6,7 +6,7 @@ import (
 	"time"
 
 	dynamo "github.com/officeadminsorted/go-oauth2-dynamodb"
-	"github.com/officeadminsorted/oauth2/v4/models"
+	"github.com/officeadminsorted/oauth2/v5/models"
 
 	"context"
 	. "github.com/smartystreets/goconvey/convey"
