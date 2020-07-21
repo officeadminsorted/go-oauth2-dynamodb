@@ -49,6 +49,8 @@ github.com/officeadminsorted/oauth2 v2.1.0+incompatible h1:L+pY0HZC2Bi2MKR8OpGeg
 github.com/officeadminsorted/oauth2 v2.1.0+incompatible/go.mod h1:p2OpxJ2eOeanRbc9x6movGGEdjbos2DcduQZ0z2Oz1g=
 github.com/officeadminsorted/oauth2/v5 v5.0.1 h1:ljP/lCyCZHbNu8M30brY7U5SLfuy2TkgkazyIJT9RdU=
 github.com/officeadminsorted/oauth2/v5 v5.0.1/go.mod h1:a3QGBoiKi6fnCfw7P6T5fgm5UeISWeTmLxhjWnHzJ/s=
+github.com/officeadminsorted/oauth2/v5 v5.0.2 h1:F2lT0AQthnK7YCWwOTjS7dkTW7KtJ7AMnON187oIt2c=
+github.com/officeadminsorted/oauth2/v5 v5.0.2/go.mod h1:a3QGBoiKi6fnCfw7P6T5fgm5UeISWeTmLxhjWnHzJ/s=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.12.1/go.mod h1:zj2OWP4+oCPe1qIXoGWkgMRwljMUYCdkwsT2108oapk=
 github.com/onsi/ginkgo v1.13.0/go.mod h1:+REjRxOmWfHCjfv9TTWB1jD1Frx4XydAD3zm1lskyM0=
