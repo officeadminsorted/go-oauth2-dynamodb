@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	dynamo "github.com/aubelsb2/go-oauth2-dynamodb"
-	"github.com/go-oauth2/oauth2/v4/models"
+	dynamo "github.com/officeadminsorted/go-oauth2-dynamodb"
+	"github.com/officeadminsorted/oauth2/v4/models"
 
 	"context"
 	. "github.com/smartystreets/goconvey/convey"
